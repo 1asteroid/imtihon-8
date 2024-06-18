@@ -28,6 +28,7 @@ class Product(Base):
     price = Column(Float())
     description = Column(Text())
     product_orderitem = relationship('OrderItem', back_populates='product')
+    create_date = Column(DateTime, default=datetime.now())
 
 
 class Order(Base):
