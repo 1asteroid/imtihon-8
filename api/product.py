@@ -1,4 +1,3 @@
-from datetime import datetime
 
 from fastapi import APIRouter, status, HTTPException
 from models import Product
