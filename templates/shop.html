@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content%}
+
+	<!-- Start Hero Section -->
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>Shop</h1>
+							</div>
+							<form class="d-flex" method="GET">
+								{% csrf_token %}
+								<label for="search"></label>
+								<input class="form-control mr-2" id="search" type="search" placeholder="Search" aria-label="Search" name="product_name">
+								<button class="btn btn-secondary" type="submit">Search</button>
+							</form>
+						</div>
+						<div class="col-lg-7">
+						</div>
+
+						 <div class="row mb-5">
+							<div class="col-lg-10 offset-lg-1">
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		<!-- End Hero Section -->
+
+		<div class="untree_co-section product-section before-footer-section">
+		    <div class="container">
+		      	<div class="row">
+					{% for product in products %}
+						<!-- 1-ustunni boshlash -->
+						<div class="col-12 col-md-4 col-lg-3 mb-5">
+							<a class="product-item" href="#">
+							<div class="product-item data-id={{product.id}}">
+								<img src="{{product.image.url}}" class="img-fluid product-thumbnail">
+								<h3 class="product-title">{{product.name}}</h3>
+								<strong class="product-price">${{product.price}}</strong>
+
+								<span class="icon-cross">
+									<img src="{% static 'images/cross.svg' %}" class="img-fluid">
+								</span>
+							</div>
+							</a>
+						</div>
+						<!-- 1-ustunni tugatish -->
+					{% endfor %}
+
+
+		      	</div>
+		    </div>
+		</div>
+
+
+{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('.product-item').on('click', function(e) {
+        e.preventDefault();
+        var productId = $(this).data('id');
+
+        $.ajax({
+            type: 'POST',
+            url: '/add_to_cart/', // bu yerni o'zingizning URL bilan almashtiring
+            data: {
+                'product_id': productId,
+				"action": "add",
+                'csrfmiddlewaretoken': '{{ csrf_token }}' // CSRF token kiritishni unutmang
+            },
+            success: function(response) {
+                alert('Mahsulot savatga qo\'shildi!');
+            },
+            error: function(response) {
+                alert('Xato yuz berdi. Iltimos, qaytadan urinib ko\'ring.');
+            }
+        });
+    });
+});
+</script>
